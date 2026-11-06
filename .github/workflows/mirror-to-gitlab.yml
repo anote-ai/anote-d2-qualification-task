@@ -13,7 +13,7 @@ name: Mirror to GitLab
 # Required repository secrets:
 #   GITLAB_USER     GitLab username
 #   GITLAB_PROJECT  <namespace>/<project>, e.g. myuser/anote-d2-qualification-task
-#   GITLAB_TOKEN    Personal Access Token with scopes: api, write_repository, write_registry
+#   GITLAB_TOKEN    Personal Access Token with scopes: api, write_repository, read_registry, write_registry
 
 on:
   workflow_dispatch:
@@ -22,6 +22,10 @@ on:
         description: "Image tag to mirror"
         required: true
         default: "v1.3.0"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/mirror-to-gitlab.yml"
 
 permissions:
   contents: read
@@ -29,7 +33,7 @@ permissions:
 
 env:
   IMAGE_NAME: anote-d2-qualification-task
-  TAG: ${{ github.event.inputs.tag }}
+  TAG: ${{ github.event.inputs.tag || 'v1.3.0' }}
   EVALUATOR: D2-evaluator
 
 jobs:
