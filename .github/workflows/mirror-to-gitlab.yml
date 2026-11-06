@@ -26,6 +26,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/mirror-to-gitlab.yml"
+      - "README.md"
 
 permissions:
   contents: read

@@ -13,10 +13,14 @@ Left and right are the casualty's anatomical sides.
 | Field | Value |
 |---|---|
 | Team Name | Anote |
-| Container Image | `ghcr.io/anote-ai/anote-d2-qualification-task/anote-d2-qualification-task` |
+| GitLab Username | anote1 |
+| Project URL | https://gitlab.com/anote1/anote-d2-qualification-task |
+| Container Image | `registry.gitlab.com/anote1/anote-d2-qualification-task/anote-d2-qualification-task` |
 | Image Tag | `v1.3.0` |
 | Image Digest | `sha256:ccd54114a9f0739a8fa8ea43c47348741eb18688a75c061ed7374886654442c2` |
 | Technical Contact | vidranatan@gmail.com |
+
+The same image, with an identical digest, is also published at `ghcr.io/anote-ai/anote-d2-qualification-task/anote-d2-qualification-task`.
 
 ## Running the container
 
@@ -28,7 +32,7 @@ docker run --rm \
   --network none \
   -v /input:/app/input:ro \
   -v /output:/app/output:rw \
-  ghcr.io/anote-ai/anote-d2-qualification-task/anote-d2-qualification-task@sha256:ccd54114a9f0739a8fa8ea43c47348741eb18688a75c061ed7374886654442c2
+  registry.gitlab.com/anote1/anote-d2-qualification-task/anote-d2-qualification-task@sha256:ccd54114a9f0739a8fa8ea43c47348741eb18688a75c061ed7374886654442c2
 ```
 
 - **Input:** every `.jpg`, `.jpeg` and `.png` file in `/app/input` (flat directory).
