@@ -15,7 +15,7 @@ Left and right are the casualty's anatomical sides.
 | Team Name | Anote |
 | Container Image | `ghcr.io/anote-ai/anote-d2-qualification-task/anote-d2-qualification-task` |
 | Image Tag | `v1.3.0` |
-| Image Digest | *(added after the build)* |
+| Image Digest | `sha256:ccd54114a9f0739a8fa8ea43c47348741eb18688a75c061ed7374886654442c2` |
 | Technical Contact | vidranatan@gmail.com |
 
 ## Running the container
@@ -28,7 +28,7 @@ docker run --rm \
   --network none \
   -v /input:/app/input:ro \
   -v /output:/app/output:rw \
-  ghcr.io/anote-ai/anote-d2-qualification-task/anote-d2-qualification-task@sha256:<digest>
+  ghcr.io/anote-ai/anote-d2-qualification-task/anote-d2-qualification-task@sha256:ccd54114a9f0739a8fa8ea43c47348741eb18688a75c061ed7374886654442c2
 ```
 
 - **Input:** every `.jpg`, `.jpeg` and `.png` file in `/app/input` (flat directory).

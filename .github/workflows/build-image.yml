@@ -2,7 +2,7 @@ name: Build D2 qualification image
 
 # Builds the submission container on GitHub, smoke-tests it with the ICD run command,
 # validates the output, ClamAV-scans the filesystem, and pushes it to:
-#   - GitHub Container Registry (always):  ghcr.io/<owner>/anote-d2-qualification-task:<tag>
+#   - GitHub Container Registry (always):  ghcr.io/<owner>/<repo>/anote-d2-qualification-task:<tag>
 #   - GitLab Container Registry (only if the GITLAB_* secrets are set), which is where
 #     the ICD (section 4) says JHU/APL pulls from.
 # The submission fields (image name, tag, digest) are written to the run summary.
