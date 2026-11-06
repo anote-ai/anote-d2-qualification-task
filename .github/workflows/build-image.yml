@@ -3,8 +3,8 @@ name: Build D2 qualification image
 # Builds the submission container on GitHub, smoke-tests it with the ICD run command,
 # validates the output, ClamAV-scans the filesystem, and pushes it to:
 #   - GitHub Container Registry (always):  ghcr.io/<owner>/<repo>/anote-d2-qualification-task:<tag>
-#   - GitLab Container Registry (only if the GITLAB_* secrets are set), which is where
-#     the ICD (section 4) says JHU/APL pulls from.
+# The GitLab copy (ICD section 4) is made by mirror-to-gitlab.yml, which copies the
+# published image byte-for-byte so the digest stays identical.
 # The submission fields (image name, tag, digest) are written to the run summary.
 
 on:
@@ -32,7 +32,6 @@ permissions:
 env:
   IMAGE_NAME: anote-d2-qualification-task
   TAG: ${{ github.event.inputs.tag || 'v1.3.0' }}
-  HAS_GITLAB: ${{ secrets.GITLAB_TOKEN != '' }}
 
 jobs:
   build:
@@ -89,22 +88,6 @@ jobs:
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
           echo "digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$ref" | cut -d@ -f2)" >> "$GITHUB_OUTPUT"
 
-      - name: Push to GitLab Container Registry (if configured)
-        id: gitlab
-        env:
-          GITLAB_USER: ${{ secrets.GITLAB_USER }}
-          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-          GITLAB_PROJECT: ${{ secrets.GITLAB_PROJECT }}
-        if: env.HAS_GITLAB == 'true'
-        run: |
-          echo "$GITLAB_TOKEN" | docker login registry.gitlab.com -u "$GITLAB_USER" --password-stdin
-          project=$(echo "$GITLAB_PROJECT" | tr '[:upper:]' '[:lower:]')
-          ref="registry.gitlab.com/$project/$IMAGE_NAME:$TAG"
-          docker tag "$IMAGE_NAME:$TAG" "$ref"
-          docker push "$ref"
-          echo "ref=$ref" >> "$GITHUB_OUTPUT"
-          echo "digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$ref" | cut -d@ -f2)" >> "$GITHUB_OUTPUT"
-
       - name: Submission fields
         run: |
           {
@@ -115,13 +98,4 @@ jobs:
             echo "| Image Tag | \`$TAG\` |"
             echo "| GHCR image | \`${{ steps.ghcr.outputs.ref }}\` |"
             echo "| GHCR digest | \`${{ steps.ghcr.outputs.digest }}\` |"
-            if [ -n "${{ steps.gitlab.outputs.ref }}" ]; then
-              echo "| GitLab Username | ${{ secrets.GITLAB_USER }} |"
-              echo "| Project URL | https://gitlab.com/${{ secrets.GITLAB_PROJECT }} |"
-              echo "| Image Name | \`${{ steps.gitlab.outputs.ref }}\` |"
-              echo "| Image Digest | \`${{ steps.gitlab.outputs.digest }}\` |"
-            else
-              echo ""
-              echo "GitLab push skipped (GITLAB_USER / GITLAB_TOKEN / GITLAB_PROJECT secrets not set)."
-            fi
           } >> "$GITHUB_STEP_SUMMARY"
