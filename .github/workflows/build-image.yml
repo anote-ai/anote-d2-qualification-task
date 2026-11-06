@@ -79,7 +79,8 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
           owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          ref="ghcr.io/$owner/$IMAGE_NAME:$TAG"
+          repo=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+          ref="ghcr.io/$owner/$repo/$IMAGE_NAME:$TAG"
           docker tag "$IMAGE_NAME:$TAG" "$ref"
           if ! docker push "$ref"; then
             echo "::error::GHCR refused the push. If a package named $IMAGE_NAME already exists and is linked to another repository, delete it (Org > Packages > Package settings) or grant this repository Write access under 'Manage Actions access', then re-run."
