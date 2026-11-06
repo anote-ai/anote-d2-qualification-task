@@ -81,7 +81,10 @@ jobs:
           owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           ref="ghcr.io/$owner/$IMAGE_NAME:$TAG"
           docker tag "$IMAGE_NAME:$TAG" "$ref"
-          docker push "$ref"
+          if ! docker push "$ref"; then
+            echo "::error::GHCR refused the push. If a package named $IMAGE_NAME already exists and is linked to another repository, delete it (Org > Packages > Package settings) or grant this repository Write access under 'Manage Actions access', then re-run."
+            exit 1
+          fi
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
           echo "digest=$(docker inspect --format='{{index .RepoDigests 0}}' "$ref" | cut -d@ -f2)" >> "$GITHUB_OUTPUT"
 
