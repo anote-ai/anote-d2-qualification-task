@@ -1,0 +1,8 @@
+*
+!Dockerfile
+!requirements.txt
+!d2/*.py
+!inference.py
+!validate_predictions.py
+!entrypoint.sh
+!model/*.pt
